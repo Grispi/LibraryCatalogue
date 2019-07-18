@@ -43,7 +43,20 @@ class LibraryCatalogue():
             self.sorryBookAlreadyCheckedOut()
         else:
             book.setIsCheckedOut(True, self.currentDay)
-            print("You just checked out")
+            print("You just checked out ",
+                  book.getTitle(), ". It is due on day ",
+                  (self.currentDay + self.getLengthOfCheckoutPeriod()), ".")
+
+    def returnBook(self, title):
+        book = self.getBook(title)
+        daysLate = self.currentDay - \
+            (book.getDayCheckedOut() + self.getLengthOfCheckoutPeriod())
+        if daysLate > 0:
+            print("You owe the library $",  (self.getInitialLateFee() + daysLate *
+                                             self.getFeePerLateDay()), "Because your book is ", daysLate, " days overdue")
+        else:
+            print("Book returned. Thank you")
+        book.setIsCheckedOut(False, -1)
 
     def sorryBookAlreadyCheckedOut(self):
         print("Sorry Book Already CheckedOut")
@@ -58,9 +71,6 @@ lib.checkoutBook("Harry Potter")
 lib.nextDay()
 lib.nextDay()
 lib.checkoutBook("Harry Potter")
-# lib.nextDay()
-# lib.nextDay()
-# lib.checkoutBook("Harry Poter")
-
-# print(p1.title, p1.bookISBN, p1.bookPageCount)
-# print(p1.getTitle(), p1.getCountPage())
+lib.setDay(17)
+lib.returnBook("Harry Potter")
+lib.checkoutBook("Harry Potter")
